@@ -28,6 +28,7 @@ def load_kb(path: Path) -> list[dict]:
 
 
 def answer(question: str, docs: list[dict], vec, X) -> dict:
+    # retrieve top chunks, then just stitch them — no external LLM needed for the demo
     sims = cosine_similarity(vec.transform([question]), X).ravel()
     idx = sims.argsort()[::-1][:2]
     contexts = [docs[i] for i in idx]
