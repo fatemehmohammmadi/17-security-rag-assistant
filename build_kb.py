@@ -1,0 +1,31 @@
+"""Build a small security knowledge base as JSONL chunks."""
+
+from __future__ import annotations
+
+import json
+from pathlib import Path
+
+OUT = Path(__file__).parent / "data" / "kb.jsonl"
+
+DOCS = [
+    {"id": "kb1", "title": "SSH brute force", "text": "Detect SSH brute force by counting failed authentications per source IP within a short window. Correlate with successful login after failures."},
+    {"id": "kb2", "title": "DNS tunneling", "text": "DNS tunneling often shows long subdomain labels, high entropy query names, and unusual TXT/NULL query volumes to a single domain."},
+    {"id": "kb3", "title": "Beaconing C2", "text": "C2 beaconing appears as near-periodic connections with low jitter. Measure inter-arrival coefficient of variation for each src-dst pair."},
+    {"id": "kb4", "title": "Lateral movement", "text": "Watch for unusual remote authentication chains across hosts, especially toward domain controllers or privileged servers."},
+    {"id": "kb5", "title": "Phishing URLs", "text": "Lexical phishing cues include IP hosts, many hyphens, suspicious tokens like login/verify, and brand impersonation in subdomains."},
+    {"id": "kb6", "title": "DGA domains", "text": "DGA domains are often long, high-entropy, and consonant-heavy labels with rare TLDs. Use entropy and digit ratio features."},
+    {"id": "kb7", "title": "Ransomware", "text": "Ransomware may delete shadow copies, encrypt many files rapidly, and drop ransom notes. Endpoint telemetry and file-event spikes are key signals."},
+    {"id": "kb8", "title": "Alert triage", "text": "Prioritize alerts using severity, asset criticality, threat-intel hits, and rarity. High TI + critical asset should jump the queue."},
+]
+
+
+def main() -> None:
+    OUT.parent.mkdir(parents=True, exist_ok=True)
+    with OUT.open("w", encoding="utf-8") as f:
+        for d in DOCS:
+            f.write(json.dumps(d) + "\n")
+    print(f"Wrote {len(DOCS)} docs -> {OUT}")
+
+
+if __name__ == "__main__":
+    main()
